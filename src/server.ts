@@ -1,12 +1,14 @@
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
 dotenv.config(); // ⚠️ Siempre debe ir primero
 
-import express from 'express';
-import cors from 'cors';
-import sql from 'mssql';
+import express from "express";
+import cors from "cors";
+import sql from "mssql";
 
-import drawsRouter from './routes/draws.routes';
-import dbConfig from './config/db.config'; // Ajusta la ruta si es necesario
+import drawsRouter from "./routes/draws.routes";
+import authRouter from "./routes/auth.routes";
+
+import dbConfig from "./config/db.config"; // Ajusta la ruta si es necesario
 
 const app = express();
 const port = process.env.PORT ?? 3000;
@@ -19,17 +21,20 @@ let dbPool: sql.ConnectionPool;
 export { dbPool };
 
 // Conectar a la base de datos
-sql.connect(dbConfig).then(pool => {
-  dbPool = pool;
-  console.log('✅ Conectado a SQL Server');
+sql
+  .connect(dbConfig)
+  .then((pool) => {
+    dbPool = pool;
+    console.log("✅ Conectado a SQL Server");
 
-  // Rutas
-  app.use('/api/draws', drawsRouter);
+    // Rutas
+    app.use("/api/draws", drawsRouter);
+    app.use("/api/auth", authRouter);
 
-  app.listen(port, () => {
-    console.log(`🚀 Servidor escuchando en http://localhost:${port}`);
+    app.listen(port, () => {
+      console.log(`🚀 Servidor escuchando en http://localhost:${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error("❌ Error al conectar a SQL Server:", err.message);
   });
-
-}).catch(err => {
-  console.error('❌ Error al conectar a SQL Server:', err.message);
-});
