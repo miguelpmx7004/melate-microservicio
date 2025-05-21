@@ -22,7 +22,7 @@ pipeline {
 
     stage('Run tests') {
       steps {
-        sh 'npm test' // si tienes pruebas configuradas
+        bat 'npm test' // si tienes pruebas configuradas
       }
     }
   }
