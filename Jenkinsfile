@@ -10,13 +10,13 @@ pipeline {
 
     stage('Install dependencies') {
       steps {
-        sh 'npm install'
+        bat 'npm install'
       }
     }
 
     stage('Build') {
       steps {
-        sh 'npm run build' // o 'tsc' si usas TypeScript directamente
+        bat 'npm run build' // o 'tsc' si usas TypeScript directamente
       }
     }
 
